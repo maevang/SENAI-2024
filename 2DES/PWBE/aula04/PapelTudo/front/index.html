@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Yeseva+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Papelaria PapelTudo</title>
+</head>
+
+<body>
+    <header>
+        <h1>Inventario - Papelaria PapelTudo</h1>
+
+        <form action="/submit_form.php" method="POST">
+
+            <label for="id">Id:</label><br>
+            <input type="text" id="id" name="id"><br>
+    
+            <label for="nome">Nome:</label><br>
+            <input type="nome" id="nome" name="nome"><br>
+
+            <label for="descrição">Descrição:</label><br>
+            <input type="descrição" id="descrição" name="descrição"><br>
+
+            <label for="valor">Valor:</label><br>
+            <input type="valor" id="valor" name="valor"><br>
+
+            <div class="btn-enviar"><input type="submit" value="CADASTRAR"></div>
+    
+        </form>
+    </header>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody id="dados">
+            </tbody>
+            
+            <tbody>
+              <tr>
+                <td>i001</td>
+                <td>Mesa</td>
+                <td>Mesa de escritório</td>
+                <td>R$100,00</td>
+                <td><button>[ - ]</button></td>
+                <td><button>[ * ]</button></td>
+              </tr> 
+              <tr>
+                <td>i002</td>
+                <td>Computador</td>
+                <td>Desktop DEL i5, 8GB RAM, SSD 500GB</td>
+                <td>R$2.200,00</td>
+                <td><button>[ - ]</button></td>
+                <td><button>[ * ]</button></td>
+              </tr>
+              <tr>
+                <td>i003</td>
+                <td>Cadeira</td>
+                <td>Cadeira Giratória de escritório</td>
+                <td>R$500,00</td>
+                <td><button>[ - ]</button></td>
+                <td><button>[ * ]</button></td>
+              </tr>
+              <tr>
+                <td>i004</td>
+                <td>Longarina</td>
+                <td>Longarina de três cadeiras</td>
+                <td>R$450,00</td>
+                <td><button>[ - ]</button></td>
+                <td><button>[ * ]</button></td>
+              </tr>
+              <tr>
+                <td>i005</td>
+                <td>Multifuncional</td>
+                <td>Impressora e Copiadora multifuncional Xerox</td>
+                <td>R$2.000,00</td>
+                <td><button>[ - ]</button></td>
+                <td><button>[ * ]</button></td>
+              </tr> 
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        <label for="Mensagem do Sistema">Mensagem do Sistema:</label><br>
+        <input type="text" id="id" name="id"><br>
+
+        <label for="patrimonio total"> Patrimonio Total:</label>:</label><br>
+        <input type="text" id="id" name="id"><br>
+    </footer>
+
+</body>
+<script>
+    const dados = document.getElementById('dados');
+    fetch('http://localhost:3000/produtos')
+        .then(res => res.json())
+        .then(res => {
+            res.forEach(cli => {
+                dados.innerHTML += ` 
+                    <tr>
+                        <td>${cli.id}</td>
+                        <td>${cli.nome}</td>
+                        <td>${cli.descrição}</td>
+                        <td>${cli.valor}</td>
+                        <td>${cli.ação}</td>
+                            <button onclick='del(${cli.id})'>[ - ]</button>
+                            <button onclick='window.location.href="./update.html?id=${cli.id}&nome=${cli.nome}&descrição=${cli.descrição}&valor=${cli.valor}&ação=${cli.ação}"'>
+                                [ * ]
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+
+    function calcIdade(nascimento) {
+        const hoje = new Date();
+        const nasc = new Date(nascimento);
+        let idade = hoje.getFullYear() - nasc.getFullYear();
+        const mes = hoje.getMonth() - nasc.getMonth();
+        if (mes < 0 || (mes === 0 && hoje.getDate() < nasc.getDate())) {
+            idade--;
+        }
+        return idade;
+    }
+
+    function del(id) {
+        fetch(`http://localhost:3000/clientes/${id}`,{method: 'DELETE'})
+            .then(res => res.json())
+            .then(res => {
+                window.location.reload();
+            });
+    }
+</script>
+
+</html>
